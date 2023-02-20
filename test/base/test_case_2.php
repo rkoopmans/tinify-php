@@ -1,4 +1,6 @@
 <?php
+require_once("vendor/autoload.php");
+
 abstract class TestCase_2 extends \PHPUnit\Framework\TestCase {
     protected  function setUp(): void {
         Tinify\CurlMock::reset();

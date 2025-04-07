@@ -4,11 +4,22 @@ if (!getenv("TINIFY_KEY")) {
     exit("Set the TINIFY_KEY environment variable.\n");
 }
 
+if (!class_exists('PHPUnit\Runner\Version')) {
+    class_alias('PHPUnit_Runner_Version', 'PHPUnit\Runner\Version');
+}
+if (version_compare(PHPUnit\Runner\Version::id(), '8') >= 0) {
+    require_once("base" . DIRECTORY_SEPARATOR . "integration_2.php");
+    class_alias('IntegrationTestCase_2', 'test_case');
+} else {
+    require_once("base" . DIRECTORY_SEPARATOR . "integration_1.php");
+    class_alias('IntegrationTestCase_1', 'test_case');
+}
 
-class Integration extends \PHPUnit\Framework\TestCase {
-    static private $optimized;
 
-    static public function setUpBeforeClass(): void {
+class Integration extends test_case {
+    static protected $optimized;
+
+    static public function initialize() {
         \Tinify\setKey(getenv("TINIFY_KEY"));
         \Tinify\setProxy(getenv("TINIFY_PROXY"));
         \Tinify\validate();
